@@ -31,7 +31,9 @@ L.geoJSON(sanFranAirport, {
     // We turn each feature into a marker on the map.
     onEachFeature: function(feature, layer) {
     console.log(layer);
-    layer.bindPopup();
+    layer.bindPopup("<h2>" + "Airport Code: " + feature.properties.faa + "</h2>" +
+                    "___________________________________________" +
+                   "<h3>" + "Airport Name: " + feature.properties.name + "</h3>");
     }
     //pointToLayer: function(feature, latlng) {
     //  console.log(feature);
@@ -51,7 +53,9 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     //id: 'mapbox/satellite-v9',
     //id: 'mapbox/streets-v11',
     //id: 'mapbox/dark-v10',
-    id: 'mapbox/navigation-preview-night-v4',
+    //id: 'mapbox/navigation-preview-night-v4',
+    //id: 'mapbox/light-v10',
+    id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1,
     accessToken: 'pk.eyJ1IjoicG9saWJlYXIiLCJhIjoiY2wxMWE4enlwMG51ODNwcDkyejI0cGl0eCJ9.7FU3w5DfEKzbJJ56WGTz6w'
