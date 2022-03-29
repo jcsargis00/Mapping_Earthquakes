@@ -1,7 +1,7 @@
 /* remove default margin and padding from body */
 html,
 body,
-map {
+#map {
   width: 100%;
   height: 100%;
   padding: 0;
