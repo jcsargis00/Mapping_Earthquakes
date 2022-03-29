@@ -3,30 +3,54 @@ console.log("working");
 // Create our initial map object
 // Set the longitude, latitude, and the starting zoom level
 
-var map = L.map('map').setView([40.7, -94.5], 4);
+
+// Create the map object with center and zoom level.
+//let map = L.map('map').setView([30, 30], 2);
+
+
+
 // Add a tile layer (the background map image) to our map
 // We use the addTo method to add objects to our map
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     //id: 'mapbox/satellite-v9',
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoicG9saWJlYXIiLCJhIjoiY2wxMWE4enlwMG51ODNwcDkyejI0cGl0eCJ9.7FU3w5DfEKzbJJ56WGTz6w'
-}).addTo(map);
+    //id: 'mapbox/streets-v11',
+    //tileSize: 512,
+    //zoomOffset: -1,
+   accessToken: API_KEY
+});
+//.addTo(map);
 
-var marker = L.marker([51.5, -0.09]).addTo(map);
+// We create the dark view tile layer that will be an option for our map.
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
 
-var circle = L.circle([51.508, -0.11], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500
-}).addTo(map);
+// Create a base layer that holds both maps.
+let baseMaps = {
+    Street: streets,
+    Dark: dark
+  };
 
-var polygon = L.polygon([
-    [51.509, -0.08],
-    [51.503, -0.06],
-    [51.51, -0.047]
-]).addTo(map);
+// Create the map object with center, zoom level and default layer.
+let map = L.map('map', {
+    center: [30, 30],
+    zoom: 2,
+    layers: [streets]
+});
+
+
+// Pass our map layers into our layers control and add the layers control to the map.
+L.control.layers(baseMaps).addTo(map);
+
+// Accessing the airport GeoJSON URL
+let airportData = "http://localhost:8000/majorAirports.json";
+// Grabbing our GeoJSON data.
+d3.json(airportData).then(function(data) {
+    console.log(data);
+  // Creating a GeoJSON layer with the retrieved data.
+  L.geoJSON(data).addTo(map);
+});
